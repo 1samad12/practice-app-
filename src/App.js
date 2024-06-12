@@ -1,23 +1,34 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    // Fetch the data from a fake API
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Data Cards</h1>
+      <div className="card-container">
+        {data.map(item => (
+          <div className="card" key={item.id}>
+            <img src={`https://picsum.photos/200/300?random=${item.id}`} alt={`Image ${item.id}`} />
+            <h2>{item.title}</h2>
+            <p>{item.body}</p>
+            {/* Add other data fields as needed */}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
